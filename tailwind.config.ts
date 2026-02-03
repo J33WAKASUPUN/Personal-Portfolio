@@ -2,7 +2,12 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -57,33 +62,52 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Custom Neon Colors mapped to your CSS variables
+        "neon-cyan": "hsl(var(--neon-cyan))",
+        "neon-magenta": "hsl(var(--neon-magenta))",
+        "neon-purple": "hsl(var(--neon-purple))",
+        "deep-electric-blue": "hsl(var(--deep-electric-blue))",
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      // 1. REGISTER THE MISSING KEYFRAMES
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        // Helper to reveal elements (opacity 0 -> 1)
+        fadeIn: {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        // Helper to pop elements in (opacity 0 -> 1)
+        scaleIn: {
+          "0%": { opacity: "0", transform: "scale(0.9)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
+        // Orbit animation for the hero ring
+        orbit: {
+          "0%": { transform: "rotate(0deg) translateX(150px) rotate(0deg)" },
+          "100%": { transform: "rotate(360deg) translateX(150px) rotate(-360deg)" },
         },
       },
+      // 2. REGISTER THE ANIMATION CLASSES
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        // The classes used in your HeroSection.tsx:
+        "fade-in": "fadeIn 0.8s ease-out forwards",
+        "scale-in": "scaleIn 0.8s ease-out forwards",
+        "orbit": "orbit 12s linear infinite",
+        "orbit-reverse": "orbit 12s linear infinite reverse",
       },
     },
   },

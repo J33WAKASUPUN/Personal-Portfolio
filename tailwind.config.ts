@@ -98,6 +98,11 @@ export default {
           "0%": { transform: "rotate(0deg) translateX(150px) rotate(0deg)" },
           "100%": { transform: "rotate(360deg) translateX(150px) rotate(-360deg)" },
         },
+        shake: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-4px)' },
+          '20%, 40%, 60%, 80%': { transform: 'translateX(4px)' },
+        },
       },
       // 2. REGISTER THE ANIMATION CLASSES
       animation: {
@@ -108,6 +113,7 @@ export default {
         "scale-in": "scaleIn 0.8s ease-out forwards",
         "orbit": "orbit 12s linear infinite",
         "orbit-reverse": "orbit 12s linear infinite reverse",
+        shake: 'shake 0.5s ease-in-out',
       },
     },
   },

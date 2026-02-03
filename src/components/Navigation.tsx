@@ -48,7 +48,7 @@ const Navigation = () => {
             }}
             className="font-orbitron text-2xl font-bold text-neon-gradient hover:text-shadow-neon-cyan transition-all duration-300"
           >
-            {'<DEV/>'}
+            {'<J33WAKA/>'}
           </a>
 
           {/* Desktop Navigation */}

@@ -1,17 +1,83 @@
+import { useState, useEffect } from 'react';
 import { ChevronDown, Github, Linkedin, Mail, Brain, Cloud, Cpu, Sparkles } from 'lucide-react';
 import TypewriterText from './TypewriterText';
 import GlitchButton from './GlitchButton';
 import heroSpaceBg from '@/assets/hero-space-bg.png';
+import { portfolioApi } from '@/lib/portfolioApi';
+
+interface HeroData {
+  name: string;
+  titles: string[];
+  bio: string;
+  profileImageUrl: string;
+  resumeUrl: string;
+  isActive: boolean;
+}
 
 const HeroSection = () => {
-  const roles = [
-    'Full-Stack Developer',
-    'Software Engineer',
-    'UI/UX Enthusiast',
-    'Problem Solver',
-  ];
+  const [heroData, setHeroData] = useState<HeroData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const aboutText = `Passionate software engineer with expertise in building scalable web applications and intuitive user experiences. I specialize in modern JavaScript frameworks, cloud architecture, and creating elegant solutions to complex problems. Ready to launch your next mission into the digital frontier.`;
+  useEffect(() => {
+    const fetchHeroData = async () => {
+      try {
+        const data = await portfolioApi.getActiveHero();
+        setHeroData(data);
+      } catch (error) {
+        console.error('Failed to fetch hero data:', error);
+        // Set fallback data if API fails
+        setHeroData({
+          name: 'Jeewaka Supun',
+          titles: [
+            'Full-Stack Developer',
+            'Software Engineer',
+            'UI/UX Enthusiast',
+            'Problem Solver',
+          ],
+          bio: 'Passionate software engineer with expertise in building scalable web applications and intuitive user experiences.',
+          profileImageUrl: '',
+          resumeUrl: '#',
+          isActive: true,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchHeroData();
+    
+    // Record page view
+    portfolioApi.recordPageView('/');
+  }, []);
+
+  if (isLoading) {
+    return (
+      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
+        {/* Background */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={heroSpaceBg} 
+            alt="Deep Space Background" 
+            className="w-full h-full object-cover object-[75%_center] opacity-70" 
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
+        </div>
+
+        {/* Loading State */}
+        <div className="relative z-10 text-center">
+          <div className="w-16 h-16 border-4 border-[hsl(var(--neon-cyan))] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="font-orbitron text-[hsl(var(--neon-cyan))] text-sm">
+            {'// Initializing connection...'}
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  if (!heroData) {
+    return null;
+  }
 
   return (
     <section
@@ -27,11 +93,6 @@ const HeroSection = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
-        
-        {/* Floating Spaceship Element */}
-        <div className="absolute top-20 right-10 w-32 h-32 md:w-48 md:h-48 opacity-80 animate-float pointer-events-none hidden lg:block">
-           {/* Add spaceship logic here if needed */}
-        </div>
       </div>
 
       {/* Content Container */}
@@ -48,21 +109,21 @@ const HeroSection = () => {
               <span className="text-foreground">Hello, I'm</span>
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] filter drop-shadow-[0_0_10px_rgba(0,243,255,0.3)]">
-                Jeewaka Supun
+                {heroData.name}
               </span>
             </h1>
 
             <div className="h-10 md:h-12 mb-6 animate-fade-in flex justify-center lg:justify-start items-center" style={{ animationDelay: '0.2s' }}>
               <span className="font-orbitron text-xl md:text-2xl text-muted-foreground mr-2">{'>'}</span>
               <TypewriterText
-                texts={roles}
+                texts={heroData.titles}
                 className="font-orbitron text-xl md:text-2xl text-[hsl(var(--neon-magenta))]"
               />
             </div>
             
             <div className="glass-card p-6 mb-8 animate-fade-in border-l-4 border-l-[hsl(var(--neon-cyan))]" style={{ animationDelay: '0.3s' }}>
               <p className="text-gray-300 text-base md:text-lg leading-relaxed font-light">
-                {aboutText}
+                {heroData.bio}
               </p>
             </div>
             
@@ -75,9 +136,11 @@ const HeroSection = () => {
               </GlitchButton>
               <GlitchButton
                 variant="outline"
-                onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+                as="a"
+                href={heroData.resumeUrl}
+                download
               >
-                Contact Me
+                Download Resume
               </GlitchButton>
             </div>
 
@@ -102,23 +165,22 @@ const HeroSection = () => {
           {/* 2. PROFILE IMAGE (Right Side) */}
           <div className="relative flex-shrink-0 order-1 lg:order-2 animate-scale-in flex justify-center lg:justify-end w-full lg:w-1/2">
             
-            {/* Increased Container Size to fit larger rings */}
+            {/* Container with rings */}
             <div className="relative w-[340px] h-[340px] md:w-[540px] md:h-[540px] flex items-center justify-center">
               
-              {/* Ring 1: Outer Dashed (Cyan) - Brighter & Glowing */}
+              {/* Ring 1: Outer Dashed (Cyan) */}
               <div className="absolute inset-0 rounded-full border border-dashed border-[hsl(var(--neon-cyan)/0.9)] shadow-[0_0_20px_hsl(var(--neon-cyan)/0.2)] animate-[spin_60s_linear_infinite]" />
               
-              {/* Ring 2: Middle Reverse (Purple) - NEW RING */}
+              {/* Ring 2: Middle Reverse (Purple) */}
               <div className="absolute inset-10 rounded-full border border-dashed border-[hsl(var(--neon-magenta)/0.9)] opacity-80 animate-[spin_45s_linear_infinite_reverse]" />
 
-              {/* Ring 3: Inner Solid (Blue) - Brighter */}
+              {/* Ring 3: Inner Solid (Blue) */}
               <div className="absolute inset-24 rounded-full border-2 border-[hsl(var(--deep-electric-blue)/0.9)] shadow-[0_0_15px_hsl(var(--deep-electric-blue)/0.4)]" />
 
-              {/* Ring 4: Pulsing Core (Magenta) - NEW RING */}
+              {/* Ring 4: Pulsing Core (Magenta) */}
               <div className="absolute inset-32 rounded-full border border-[hsl(var(--neon-magenta)/0.4)] animate-pulse" />
 
               {/* Orbiting Icons */}
-              {/* Adjusted positions (inset) to match the larger container */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/80 border border-[hsl(var(--neon-purple)/0.8)] p-3 rounded-xl backdrop-blur-md z-20 hover:scale-110 transition-transform shadow-[0_0_15px_hsl(var(--neon-purple)/0.4)]">
                 <Sparkles size={24} className="text-[hsl(var(--neon-purple))]" />
               </div>
@@ -135,14 +197,25 @@ const HeroSection = () => {
                 <Brain size={24} className="text-[hsl(var(--neon-magenta))]" />
               </div>
 
-              {/* Profile Picture Circle - SIGNIFICANTLY BIGGER */}
-              {/* Increased from w-60 (15rem) to w-80 (20rem) */}
+              {/* Profile Picture Circle - DYNAMIC FROM CMS */}
               <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full p-1.5 bg-gradient-to-br from-[hsl(var(--neon-cyan))] via-[hsl(var(--deep-electric-blue))] to-[hsl(var(--neon-magenta))] shadow-[0_0_60px_hsl(var(--deep-electric-blue)/0.6)] z-10">
                 <div className="w-full h-full rounded-full bg-background flex items-center justify-center overflow-hidden border-[5px] border-black relative">
-                   {/* Profile Image PlaceHolder */}
-                  <div className="w-full h-full bg-gradient-to-b from-gray-900 to-black flex items-center justify-center">
-                    <span className="font-orbitron text-6xl md:text-8xl text-white font-bold">JS</span>
-                  </div>
+                  {heroData.profileImageUrl ? (
+                    <img
+                      src={heroData.profileImageUrl}
+                      alt={heroData.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-b from-gray-900 to-black flex items-center justify-center">
+                      <span className="font-orbitron text-6xl md:text-8xl text-white font-bold">
+                        {heroData.name.split(' ').map(n => n[0]).join('')}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -151,9 +224,16 @@ const HeroSection = () => {
 
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <ChevronDown className="text-muted-foreground hover:text-[hsl(var(--neon-cyan))]" size={24} />
+        {/* Scroll Indicator - UPDATED */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce flex flex-col items-center gap-2 cursor-pointer"
+             onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}>
+          <span className="font-orbitron text-[10px] md:text-xs tracking-[0.3em] text-[hsl(var(--neon-cyan))] drop-shadow-[0_0_8px_hsl(var(--neon-cyan)/0.8)] font-bold">
+            SCROLL
+          </span>
+          <ChevronDown 
+            className="text-[hsl(var(--neon-cyan))] drop-shadow-[0_0_8px_hsl(var(--neon-cyan)/0.8)]" 
+            size={24} 
+          />
         </div>
       </div>
     </section>

@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Eye, EyeOff, Check, X, FileText, Image as ImageIcon, Link as LinkIcon } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, Check, X, FileText, Image as ImageIcon, Sparkles } from 'lucide-react';
 import { api } from '../utils/api';
 import { toast } from 'sonner';
 
 interface Hero {
   _id: string;
   name: string;
-  title: string;
+  titles: string[];
   bio: string;
   profileImageUrl: string;
   resumeUrl: string;
@@ -22,7 +22,7 @@ const HeroManagement = () => {
   const [editingHero, setEditingHero] = useState<Hero | null>(null);
   const [formData, setFormData] = useState({
     name: '',
-    title: '',
+    titles: [''],
     bio: '',
     profileImageUrl: '',
     resumeUrl: '',
@@ -49,7 +49,7 @@ const HeroManagement = () => {
     setEditingHero(null);
     setFormData({
       name: '',
-      title: '',
+      titles: [''],
       bio: '',
       profileImageUrl: '',
       resumeUrl: '',
@@ -62,7 +62,7 @@ const HeroManagement = () => {
     setEditingHero(hero);
     setFormData({
       name: hero.name,
-      title: hero.title,
+      titles: hero.titles,
       bio: hero.bio,
       profileImageUrl: hero.profileImageUrl,
       resumeUrl: hero.resumeUrl,
@@ -74,14 +74,22 @@ const HeroManagement = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Filter out empty titles
+    const filteredTitles = formData.titles.filter(t => t.trim().length > 0);
+
+    if (filteredTitles.length === 0) {
+      toast.error('At least one title is required');
+      return;
+    }
+
+    const submitData = { ...formData, titles: filteredTitles };
+
     try {
       if (editingHero) {
-        // Update existing hero
-        await api.patch(`/hero/${editingHero._id}`, formData);
+        await api.patch(`/hero/${editingHero._id}`, submitData);
         toast.success('Hero section updated successfully');
       } else {
-        // Create new hero
-        await api.post('/hero', formData);
+        await api.post('/hero', submitData);
         toast.success('Hero section created successfully');
       }
 
@@ -114,6 +122,30 @@ const HeroManagement = () => {
     } catch (error: any) {
       toast.error(error.message || 'Failed to activate hero section');
     }
+  };
+
+  // Title management
+  const addTitle = () => {
+    if (formData.titles.length < 10) {
+      setFormData({ ...formData, titles: [...formData.titles, ''] });
+    } else {
+      toast.error('Maximum 10 titles allowed');
+    }
+  };
+
+  const removeTitle = (index: number) => {
+    if (formData.titles.length > 1) {
+      const newTitles = formData.titles.filter((_, i) => i !== index);
+      setFormData({ ...formData, titles: newTitles });
+    } else {
+      toast.error('At least one title is required');
+    }
+  };
+
+  const updateTitle = (index: number, value: string) => {
+    const newTitles = [...formData.titles];
+    newTitles[index] = value;
+    setFormData({ ...formData, titles: newTitles });
   };
 
   if (isLoading) {
@@ -177,18 +209,27 @@ const HeroManagement = () => {
                   alt={hero.name}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    e.currentTarget.src = 'https://via.placeholder.com/80';
+                    e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(hero.name)}&background=random&size=80`;
                   }}
                 />
               </div>
 
               <div className="flex-1 min-w-0">
-                <h3 className="font-orbitron text-xl font-bold text-foreground mb-1 truncate">
+                <h3 className="font-orbitron text-xl font-bold text-foreground mb-2 truncate">
                   {hero.name}
                 </h3>
-                <p className="text-sm text-[hsl(var(--neon-cyan))] font-orbitron mb-2 truncate">
-                  {hero.title}
-                </p>
+                <div className="space-y-1">
+                  {hero.titles.slice(0, 3).map((title, index) => (
+                    <p key={index} className="text-xs text-[hsl(var(--neon-cyan))] font-orbitron truncate">
+                      {index + 1}. {title}
+                    </p>
+                  ))}
+                  {hero.titles.length > 3 && (
+                    <p className="text-xs text-muted-foreground">
+                      +{hero.titles.length - 3} more
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -292,7 +333,7 @@ const HeroManagement = () => {
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name */}
               <div>
                 <label className="block font-orbitron text-sm uppercase tracking-wider text-[hsl(var(--neon-cyan))] mb-2">
@@ -310,21 +351,53 @@ const HeroManagement = () => {
                 />
               </div>
 
-              {/* Title */}
+              {/* Titles (Multiple) */}
               <div>
-                <label className="block font-orbitron text-sm uppercase tracking-wider text-[hsl(var(--neon-cyan))] mb-2">
-                  Title/Role *
-                </label>
-                <input
-                  type="text"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  required
-                  minLength={3}
-                  maxLength={200}
-                  className="w-full px-4 py-3 bg-[hsl(var(--void-black))] border border-[hsl(var(--deep-electric-blue)/0.5)] rounded-lg focus:border-[hsl(var(--neon-cyan))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--neon-cyan)/0.3)] text-foreground font-orbitron transition-all"
-                  placeholder="Full-Stack Developer | Software Engineer"
-                />
+                <div className="flex items-center justify-between mb-2">
+                  <label className="font-orbitron text-sm uppercase tracking-wider text-[hsl(var(--neon-cyan))]">
+                    Titles * ({formData.titles.length}/10)
+                  </label>
+                  <button
+                    type="button"
+                    onClick={addTitle}
+                    className="flex items-center gap-1 px-3 py-1 bg-[hsl(var(--neon-cyan)/0.1)] border border-[hsl(var(--neon-cyan)/0.3)] text-[hsl(var(--neon-cyan))] rounded-lg hover:bg-[hsl(var(--neon-cyan)/0.2)] transition-all text-xs font-orbitron"
+                  >
+                    <Plus className="w-3 h-3" />
+                    Add Title
+                  </button>
+                </div>
+                <p className="text-xs text-muted-foreground mb-3 flex items-center gap-1">
+                  <Sparkles className="w-3 h-3" />
+                  These will rotate in the typewriter animation on your portfolio
+                </p>
+                <div className="space-y-3">
+                  {formData.titles.map((title, index) => (
+                    <div key={index} className="flex gap-2">
+                      <span className="w-8 h-10 flex items-center justify-center bg-[hsl(var(--deep-electric-blue)/0.2)] text-[hsl(var(--neon-cyan))] rounded-lg font-orbitron text-sm flex-shrink-0">
+                        {index + 1}
+                      </span>
+                      <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => updateTitle(index, e.target.value)}
+                        required={index === 0}
+                        minLength={3}
+                        maxLength={100}
+                        className="flex-1 px-4 py-2 bg-[hsl(var(--void-black))] border border-[hsl(var(--deep-electric-blue)/0.5)] rounded-lg focus:border-[hsl(var(--neon-cyan))] focus:outline-none text-foreground transition-all"
+                        placeholder={`Title ${index + 1} (e.g., Full-Stack Developer)`}
+                      />
+                      {formData.titles.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeTitle(index)}
+                          className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Bio */}
@@ -367,7 +440,7 @@ const HeroManagement = () => {
                       alt="Preview"
                       className="w-24 h-24 rounded-full object-cover border-2 border-[hsl(var(--neon-cyan))]"
                       onError={(e) => {
-                        e.currentTarget.src = 'https://via.placeholder.com/96';
+                        e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(formData.name || 'User')}&background=random&size=96`;
                       }}
                     />
                   </div>
@@ -400,11 +473,7 @@ const HeroManagement = () => {
                 />
                 <label htmlFor="isActive" className="flex-1 cursor-pointer">
                   <p className="font-orbitron text-sm text-foreground">Set as Active</p>
-                  <p className="text-xs text-muted-foreground">
-                    {formData.isActive
-                      ? 'This hero will be displayed on your portfolio (deactivates others)'
-                      : 'This hero will be saved but not displayed'}
-                  </p>
+                  <p className="text-xs text-muted-foreground">This will be displayed on your portfolio</p>
                 </label>
               </div>
 

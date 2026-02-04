@@ -81,7 +81,7 @@ class PortfolioApiService {
 
   // Social Links
   async getVisibleSocialLinks() {
-    return this.fetch('/social-links/visible');
+    return this.fetch('/social-links'); // ✅ Public endpoint (no /visible needed)
   }
 
   // Analytics
@@ -146,7 +146,7 @@ class PortfolioApiService {
     let sessionId = sessionStorage.getItem('portfolio_session_id');
     
     if (!sessionId) {
-      sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      sessionId = `session_${Date.now()}_${Math.random().toString().substr(2, 9)}`;
       sessionStorage.setItem('portfolio_session_id', sessionId);
     }
     

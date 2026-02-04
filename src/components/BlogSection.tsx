@@ -1,36 +1,32 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ExternalLink, Github, Building2, Star, Eye } from 'lucide-react';
+import { ExternalLink, Calendar, BookOpen, Tag } from 'lucide-react';
 import { portfolioApi } from '@/lib/portfolioApi';
 import GlitchButton from './GlitchButton';
 
-interface ProjectTechStack {
-  techId: string;
-  name: string;
-  logoUrl: string;
-  category: string;
-}
-
-interface Project {
+interface Blog {
   _id: string;
   title: string;
   description: string;
-  fullDescription: string;
-  thumbnailUrl: string;
-  techStack: ProjectTechStack[];
-  repoLink?: string;
-  liveLink?: string;
-  associatedCompany?: string;
-  companyLogo?: string;
-  isFeatured: boolean;
+  content: string;
+  link: string;
+  pubDate: string;
+  thumbnail?: string;
+  categories: string[];
+  tags: string[];
+  author?: string;
+  readTime?: string;
+  claps?: number;
+  source: string;
   order: number;
   isVisible: boolean;
+  isFeatured: boolean;
 }
 
-const ProjectsSection = () => {
+const BlogSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(true);
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [blogs, setBlogs] = useState<Blog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -58,22 +54,33 @@ const ProjectsSection = () => {
   }, []);
 
   useEffect(() => {
-    fetchProjects();
+    fetchBlogs();
   }, []);
 
-  const fetchProjects = async () => {
+  const fetchBlogs = async () => {
     try {
       setIsLoading(true);
-      const data = await portfolioApi.getFeaturedProjects();
-      console.log('✅ Featured projects loaded:', data.length, 'records');
-      setProjects(data);
+      const data = await portfolioApi.getFeaturedBlogs();
+      console.log('✅ Featured blogs loaded:', data.length, 'records');
+      setBlogs(data);
     } catch (error) {
-      console.error('❌ Failed to fetch projects:', error);
-      setProjects([]);
+      console.error('❌ Failed to fetch blogs:', error);
+      setBlogs([]);
     } finally {
       setIsLoading(false);
     }
   };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  };
+
+  // Create duplicated array for seamless infinite scroll
+  const marqueeBlogs = [...blogs, ...blogs];
 
   if (isLoading) {
     return (
@@ -82,7 +89,7 @@ const ProjectsSection = () => {
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
               <div className="w-16 h-16 border-4 border-[hsl(var(--neon-cyan))] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-              <p className="font-orbitron text-[hsl(var(--neon-cyan))]">Loading projects...</p>
+              <p className="font-orbitron text-[hsl(var(--neon-cyan))]">Loading blogs...</p>
             </div>
           </div>
         </div>
@@ -90,17 +97,14 @@ const ProjectsSection = () => {
     );
   }
 
-  if (projects.length === 0) {
+  if (blogs.length === 0) {
     return null;
   }
-
-  // Duplicate projects to create seamless loop
-  const marqueeProjects = [...projects, ...projects];
 
   return (
     <section
       ref={sectionRef}
-      id="projects"
+      id="blogs"
       className="relative py-32 overflow-hidden"
     >
       {/* Background */}
@@ -113,19 +117,18 @@ const ProjectsSection = () => {
         {/* Section Header */}
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <p className="font-orbitron text-[hsl(var(--neon-cyan))] text-sm uppercase tracking-[0.3em] mb-4">
-            {'// Projects.featured()'}
+            {'// Blogs.featured()'}
           </p>
           <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-neon-gradient mb-4">
-            Featured Projects
+            Latest Articles
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Explore my most impactful work. Each project showcases cutting-edge technologies 
-            and innovative solutions to real-world challenges.
+            Insights, tutorials, and thoughts on software development, technology, and innovation.
           </p>
           <div className="w-24 h-1 bg-gradient-to-r from-[hsl(var(--neon-cyan))] via-[hsl(var(--deep-electric-blue))] to-[hsl(var(--neon-magenta))] mx-auto mt-6" />
         </div>
 
-        {/* Projects Infinite Scroll Marquee */}
+        {/* Blogs Infinite Scroll Marquee */}
         <div className="w-full overflow-hidden">
           {/* Gradient Overlays for smooth fade out at edges */}
           <div className="relative">
@@ -135,11 +138,11 @@ const ProjectsSection = () => {
             {/* Moving Track */}
             <div 
               className="flex gap-8 animate-marquee hover:pause"
-              style={{ width: 'max-content' }} // Ensures container fits all items
+              style={{ width: 'max-content' }}
             >
-              {marqueeProjects.map((project, index) => (
+              {marqueeBlogs.map((blog, index) => (
                 <div
-                  key={`${project._id}-${index}`} // Unique key for duplicates
+                  key={`${blog._id}-${index}`}
                   className="flex-shrink-0 w-[400px]"
                 >
                   {/* CRT Monitor Card */}
@@ -151,113 +154,101 @@ const ProjectsSection = () => {
                         <div className="w-2 h-2 rounded-full bg-yellow-500/80" />
                         <div className="w-2 h-2 rounded-full bg-green-500/80" />
                         <span className="ml-2 font-orbitron text-[9px] text-muted-foreground uppercase tracking-wider truncate">
-                          {project.title.toLowerCase().replace(/\s+/g, '_')}.exe
+                          article.md
                         </span>
                       </div>
-                      {project.isFeatured && (
-                        <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                      )}
+                      <div className="flex items-center gap-1 px-2 py-0.5 bg-[hsl(var(--neon-cyan)/0.2)] border border-[hsl(var(--neon-cyan)/0.3)] rounded-full">
+                        <BookOpen className="w-3 h-3 text-[hsl(var(--neon-cyan))]" />
+                        <span className="text-[9px] font-orbitron text-[hsl(var(--neon-cyan))] uppercase">{blog.source}</span>
+                      </div>
                     </div>
 
                     {/* Thumbnail */}
                     <div className="relative h-48 overflow-hidden">
                       <img
-                        src={project.thumbnailUrl}
-                        alt={project.title}
+                        src={blog.thumbnail || `https://ui-avatars.com/api/?name=${encodeURIComponent(blog.title)}&background=random&size=400`}
+                        alt={blog.title}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         onError={(e) => {
-                          e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(project.title)}&background=random&size=400`;
+                          e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(blog.title)}&background=random&size=400`;
                         }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
                       
-                      {/* Company Badge */}
-                      {project.associatedCompany && (
-                        <div className="absolute top-3 right-3 flex items-center gap-2 px-3 py-1.5 bg-black/80 backdrop-blur-sm border border-[hsl(var(--deep-electric-blue)/0.5)] rounded-full">
-                          {project.companyLogo && (
-                            <img
-                              src={project.companyLogo}
-                              alt={project.associatedCompany}
-                              className="w-4 h-4 object-contain"
-                            />
-                          )}
-                          <Building2 className="w-3 h-3 text-[hsl(var(--neon-cyan))]" />
-                          <span className="text-[10px] font-orbitron text-foreground">{project.associatedCompany}</span>
+                      {/* Featured Badge */}
+                      {blog.isFeatured && (
+                        <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 bg-[hsl(var(--neon-cyan)/0.9)] backdrop-blur-sm rounded-full">
+                          <span className="text-[10px] font-orbitron text-background font-bold uppercase">Featured</span>
                         </div>
                       )}
                     </div>
 
                     {/* Content */}
                     <div className="p-6 flex-1 flex flex-col">
-                      <h3 className="font-orbitron text-xl font-bold text-foreground mb-3 group-hover:text-[hsl(var(--neon-cyan))] transition-colors line-clamp-2">
-                        {project.title}
+                      {/* Meta Info - Date Only (removed read time) */}
+                      <div className="flex items-center gap-3 mb-3 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          <span>{formatDate(blog.pubDate)}</span>
+                        </div>
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="font-orbitron text-lg font-bold text-foreground mb-3 group-hover:text-[hsl(var(--neon-cyan))] transition-colors line-clamp-2 leading-tight">
+                        {blog.title}
                       </h3>
 
+                      {/* Description */}
                       <p className="text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-3 flex-1">
-                        {project.description}
+                        {blog.description}
                       </p>
 
-                      {/* Tech Stack Pills */}
+                      {/* Categories */}
                       <div className="flex flex-wrap gap-2 mb-4">
-                        {project.techStack.slice(0, 4).map((tech) => (
+                        {blog.categories.slice(0, 3).map((category) => (
                           <div
-                            key={tech.techId}
-                            className="flex items-center gap-1.5 px-2 py-1 bg-[hsl(var(--deep-electric-blue)/0.2)] border border-[hsl(var(--deep-electric-blue)/0.3)] rounded-full group-hover:border-[hsl(var(--neon-cyan)/0.5)] transition-colors"
+                            key={category}
+                            className="flex items-center gap-1 px-2 py-1 bg-[hsl(var(--deep-electric-blue)/0.2)] border border-[hsl(var(--deep-electric-blue)/0.3)] rounded-full group-hover:border-[hsl(var(--neon-cyan)/0.5)] transition-colors"
                           >
-                            <img
-                              src={tech.logoUrl}
-                              alt={tech.name}
-                              className="w-3 h-3 object-contain"
-                              onError={(e) => {
-                                e.currentTarget.src = `https://ui-avatars.com/api/?name=${tech.name}&background=random&size=16`;
-                              }}
-                            />
+                            <Tag className="w-2.5 h-2.5 text-[hsl(var(--neon-cyan))]" />
                             <span className="text-[10px] font-orbitron text-foreground/80 uppercase">
-                              {tech.name}
+                              {category}
                             </span>
                           </div>
                         ))}
-                        {project.techStack.length > 4 && (
+                        {blog.categories.length > 3 && (
                           <div className="px-2 py-1 bg-[hsl(var(--neon-cyan)/0.1)] border border-[hsl(var(--neon-cyan)/0.3)] rounded-full">
                             <span className="text-[10px] font-orbitron text-[hsl(var(--neon-cyan))]">
-                              +{project.techStack.length - 4}
+                              +{blog.categories.length - 3}
                             </span>
                           </div>
                         )}
                       </div>
 
-                      {/* Action Buttons */}
-                      <div className="flex gap-2">
-                        {project.liveLink && (
-                          <a
-                            href={project.liveLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--deep-electric-blue))] text-background font-orbitron text-xs uppercase rounded-lg hover:shadow-[0_0_20px_hsl(var(--neon-cyan)/0.5)] transition-all"
-                          >
-                            <ExternalLink className="w-3 h-3" />
-                            Live
-                          </a>
-                        )}
-                        {project.repoLink && (
-                          <a
-                            href={project.repoLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-transparent border border-[hsl(var(--neon-magenta))] text-[hsl(var(--neon-magenta))] font-orbitron text-xs uppercase rounded-lg hover:bg-[hsl(var(--neon-magenta)/0.1)] hover:shadow-[0_0_20px_hsl(var(--neon-magenta)/0.5)] transition-all"
-                          >
-                            <Github className="w-3 h-3" />
-                            Code
-                          </a>
+                      {/* Author & Claps */}
+                      <div className="flex items-center justify-between mb-4 text-xs text-muted-foreground">
+                        {blog.author && (
+                          <span className="font-orbitron">by {blog.author}</span>
                         )}
                       </div>
+
+                      {/* Read on Medium Button */}
+                      <a
+                        href={blog.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--deep-electric-blue))] text-background font-orbitron text-xs font-bold uppercase rounded-lg hover:shadow-[0_0_20px_hsl(var(--neon-cyan)/0.5)] transition-all"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        Read on {blog.source}
+                      </a>
                     </div>
 
                     {/* Status Bar */}
                     <div className="px-4 py-2 border-t border-[hsl(var(--deep-electric-blue)/0.3)] flex items-center justify-between">
                       <div className="flex items-center gap-1.5">
-                        <Eye className="w-3 h-3 text-[hsl(var(--neon-cyan))]" />
-                        <span className="text-[9px] text-muted-foreground font-mono">Click to explore</span>
+                        <BookOpen className="w-3 h-3 text-[hsl(var(--neon-cyan))]" />
+                        <span className="text-[9px] text-muted-foreground font-mono">Click to read article</span>
                       </div>
                       <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                     </div>
@@ -269,14 +260,14 @@ const ProjectsSection = () => {
         </div>
 
         {/* View All Button */}
-        <div className={`mt-16 text-center transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+        {/* <div className={`mt-16 text-center transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
           <GlitchButton
             variant="primary"
-            onClick={() => navigate('/projects')}
+            onClick={() => navigate('/blogs')}
           >
-            Explore All Projects
+            Read All Articles
           </GlitchButton>
-        </div>
+        </div> */}
 
         {/* Bottom Decorative Element */}
          <div className={`mt-16 flex justify-center transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
@@ -290,7 +281,7 @@ const ProjectsSection = () => {
         </div>
       </div>
 
-      {/* Styles for Infinite Marquee Animation */}
+      {/* Styles for Infinite Marquee Animation - SLOWED DOWN TO 80s */}
       <style jsx>{`
         @keyframes scroll-left {
           0% {
@@ -302,7 +293,7 @@ const ProjectsSection = () => {
         }
         
         .animate-marquee {
-          animation: scroll-left 40s linear infinite;
+          animation: scroll-left 80s linear infinite; /* Increased from 40s to 80s */
         }
         
         .hover\\:pause:hover {
@@ -313,4 +304,4 @@ const ProjectsSection = () => {
   );
 };
 
-export default ProjectsSection;
+export default BlogSection;

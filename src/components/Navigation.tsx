@@ -20,6 +20,7 @@ const Navigation = () => {
     // { href: '#experience', label: 'Experience' },
     { href: '#tech', label: 'Skills' },
     { href: '#projects', label: 'Projects' },
+    { href: '#blogs', label: 'Blog' },
     { href: '#contact', label: 'Contact' },
   ];
 
@@ -52,7 +53,7 @@ const Navigation = () => {
               }}
               className="font-orbitron text-2xl font-bold text-neon-gradient cursor-pointer"
             >
-              {'<JK />'}
+              {'Jeewaka Supun'}
             </a>
 
             {/* Desktop Menu */}

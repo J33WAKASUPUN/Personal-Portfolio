@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { Mail, Send, ExternalLink } from 'lucide-react';
+import { Mail, Send, ExternalLink, CheckCircle, AlertCircle } from 'lucide-react';
 import { portfolioApi } from '@/lib/portfolioApi';
 import GlitchButton from './GlitchButton';
+import emailjs from '@emailjs/browser';
+import { toast } from 'sonner';
 
 interface SocialLink {
   _id: string;
@@ -16,12 +18,14 @@ interface SocialLink {
 
 const ContactSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   const [isLoadingSocial, setIsLoadingSocial] = useState(true);
+  const [isSending, setIsSending] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
+    from_name: '',
+    from_email: '',
     message: '',
   });
 
@@ -60,10 +64,65 @@ const ContactSection = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
+
+    // Validate environment variables
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    if (!serviceId || !templateId || !publicKey) {
+      toast.error('EmailJS configuration is missing. Please check your environment variables.');
+      console.error('Missing EmailJS config:', { serviceId, templateId, publicKey });
+      return;
+    }
+
+    if (!formRef.current) {
+      toast.error('Form reference is missing.');
+      return;
+    }
+
+    setIsSending(true);
+
+    try {
+      // Send email using EmailJS
+      const result = await emailjs.sendForm(
+        serviceId,
+        templateId,
+        formRef.current,
+        publicKey
+      );
+
+      console.log('✅ Email sent successfully:', result);
+
+      // Success notification
+      toast.success('Message sent successfully! 🚀', {
+        description: 'I\'ll get back to you as soon as possible.',
+        duration: 5000,
+      });
+
+      // Reset form
+      setFormData({
+        from_name: '',
+        from_email: '',
+        message: '',
+      });
+
+      if (formRef.current) {
+        formRef.current.reset();
+      }
+    } catch (error: any) {
+      console.error('❌ Failed to send email:', error);
+      
+      // Error notification with details
+      toast.error('Failed to send message', {
+        description: error?.text || 'Please try again or contact me directly via email.',
+        duration: 7000,
+      });
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -205,57 +264,84 @@ const ContactSection = () => {
                   Send Transmission
                 </h3>
 
-                <form onSubmit={handleSubmit} className="space-y-6 flex-1 flex flex-col">
+                <form ref={formRef} onSubmit={handleSubmit} className="space-y-6 flex-1 flex flex-col">
                   {/* Name Field */}
                   <div>
-                    <label className="block font-orbitron text-xs uppercase tracking-wider text-[hsl(var(--neon-cyan))] mb-2">
+                    <label htmlFor="from_name" className="block font-orbitron text-xs uppercase tracking-wider text-[hsl(var(--neon-cyan))] mb-2">
                       {'> '}Identifier
                     </label>
                     <input
                       type="text"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      id="from_name"
+                      name="from_name"
+                      value={formData.from_name}
+                      onChange={(e) => setFormData({ ...formData, from_name: e.target.value })}
                       placeholder="Enter your name"
                       className="w-full px-4 py-3 bg-[hsl(var(--deep-electric-blue)/0.1)] border border-[hsl(var(--deep-electric-blue)/0.3)] rounded-lg font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-[hsl(var(--neon-cyan))] focus:shadow-[0_0_15px_hsl(var(--neon-cyan)/0.3)] transition-all duration-300"
                       required
+                      disabled={isSending}
+                      minLength={2}
+                      maxLength={100}
                     />
                   </div>
 
                   {/* Email Field */}
                   <div>
-                    <label className="block font-orbitron text-xs uppercase tracking-wider text-[hsl(var(--neon-cyan))] mb-2">
+                    <label htmlFor="from_email" className="block font-orbitron text-xs uppercase tracking-wider text-[hsl(var(--neon-cyan))] mb-2">
                       {'> '}Communication Frequency
                     </label>
                     <input
                       type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      id="from_email"
+                      name="from_email"
+                      value={formData.from_email}
+                      onChange={(e) => setFormData({ ...formData, from_email: e.target.value })}
                       placeholder="Enter your email"
                       className="w-full px-4 py-3 bg-[hsl(var(--deep-electric-blue)/0.1)] border border-[hsl(var(--deep-electric-blue)/0.3)] rounded-lg font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-[hsl(var(--neon-cyan))] focus:shadow-[0_0_15px_hsl(var(--neon-cyan)/0.3)] transition-all duration-300"
                       required
+                      disabled={isSending}
                     />
                   </div>
 
                   {/* Message Field */}
                   <div className="flex-1 flex flex-col">
-                    <label className="block font-orbitron text-xs uppercase tracking-wider text-[hsl(var(--neon-cyan))] mb-2">
+                    <label htmlFor="message" className="block font-orbitron text-xs uppercase tracking-wider text-[hsl(var(--neon-cyan))] mb-2">
                       {'> '}Transmission Content
                     </label>
                     <textarea
+                      id="message"
+                      name="message"
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Enter your message..."
                       rows={5}
                       className="w-full flex-1 px-4 py-3 bg-[hsl(var(--deep-electric-blue)/0.1)] border border-[hsl(var(--deep-electric-blue)/0.3)] rounded-lg font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-[hsl(var(--neon-cyan))] focus:shadow-[0_0_15px_hsl(var(--neon-cyan)/0.3)] transition-all duration-300 resize-none"
                       required
+                      disabled={isSending}
+                      minLength={10}
+                      maxLength={2000}
                     />
                   </div>
 
                   {/* Submit Button */}
-                  <GlitchButton type="submit" variant="primary" className="w-full">
+                  <GlitchButton 
+                    type="submit" 
+                    variant="primary" 
+                    className="w-full"
+                    disabled={isSending}
+                  >
                     <span className="flex items-center justify-center gap-2">
-                      <Send size={18} />
-                      Transmit Message
+                      {isSending ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-background border-t-transparent rounded-full animate-spin" />
+                          Transmitting...
+                        </>
+                      ) : (
+                        <>
+                          <Send size={18} />
+                          Transmit Message
+                        </>
+                      )}
                     </span>
                   </GlitchButton>
                 </form>

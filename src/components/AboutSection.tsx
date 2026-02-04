@@ -109,10 +109,12 @@ const AboutSection = () => {
       id="about"
       className="relative py-32 overflow-hidden"
     >
-      {/* Background effects */}
+      {/* Background effects - UPDATED TO CENTER */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-neon-cyan/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-neon-magenta/5 rounded-full blur-3xl" />
+        {/* Centered Cyan light */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-neon-cyan/5 rounded-full blur-3xl" />
+        {/* Centered Magenta light (slightly offset for depth) */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-[40%] -translate-y-[40%] w-[500px] h-[500px] bg-neon-magenta/5 rounded-full blur-3xl" />
       </div>
 
       <div className="container mx-auto px-6 relative z-10">

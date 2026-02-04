@@ -102,7 +102,7 @@ const HeroSection = () => {
           {/* 1. TEXT CONTENT (Left Side) */}
           <div className="flex flex-col justify-center text-center lg:text-left w-full lg:w-1/2 order-2 lg:order-1">
             <p className="font-orbitron text-[hsl(var(--neon-cyan))] text-sm md:text-base uppercase tracking-[0.3em] mb-4 animate-fade-in">
-              {'// Initializing connection...'}
+              {'// Connection Established...'}
             </p>
             
             <h1 className="font-orbitron text-4xl md:text-6xl font-bold mb-6 animate-fade-in" style={{ animationDelay: '0.1s' }}>
@@ -166,13 +166,13 @@ const HeroSection = () => {
                 { icon: Linkedin, href: '#', label: 'LinkedIn' },
                 { icon: Mail, href: '#', label: 'Email' },
               ].map((social) => (
-                <a
+              <a
                   key={social.label}
                   href={social.href}
-                  className="p-3 rounded-full border border-white/10 text-gray-400 hover:text-[hsl(var(--neon-cyan))] hover:border-[hsl(var(--neon-cyan))] hover:shadow-[0_0_15px_hsl(var(--neon-cyan)/0.4)] transition-all duration-300 bg-black/50 backdrop-blur-md"
+                  className="p-2.5 rounded-lg bg-[hsl(var(--deep-electric-blue)/0.1)] border border-[hsl(var(--deep-electric-blue)/0.3)] text-muted-foreground hover:text-[hsl(var(--neon-cyan))] hover:border-[hsl(var(--neon-cyan))] hover:shadow-[0_0_15px_hsl(var(--neon-cyan)/0.4)] transition-all duration-300 group"
                   aria-label={social.label}
                 >
-                  <social.icon size={20} />
+                  <social.icon size={18} className="group-hover:scale-110 transition-transform" />
                 </a>
               ))}
             </div>

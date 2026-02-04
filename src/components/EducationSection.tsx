@@ -35,7 +35,7 @@ interface Certification {
 
 const EducationSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false); // Keep as false initially
   const [educations, setEducations] = useState<Education[]>([]);
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,15 +43,25 @@ const EducationSection = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
+        console.log('👁️ Education Section in view:', entry.isIntersecting);
         if (entry.isIntersecting) {
           setIsVisible(true);
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 } // Lower threshold from 0.2 to 0.1
     );
 
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
+      console.log('✅ IntersectionObserver attached to Education Section');
+      
+      // Check if already in viewport on mount
+      const rect = sectionRef.current.getBoundingClientRect();
+      const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+      if (isInViewport) {
+        console.log('🔵 Section already in viewport, setting visible immediately');
+        setIsVisible(true);
+      }
     }
 
     return () => observer.disconnect();
@@ -65,24 +75,23 @@ const fetchEducationData = async () => {
   try {
     setIsLoading(true);
     
-    // Fetch education and certifications separately with individual error handling
     let eduData: Education[] = [];
     let certData: Certification[] = [];
 
     try {
       eduData = await portfolioApi.getVisibleEducation();
       console.log('✅ Education data loaded:', eduData.length, 'records');
+      console.log('📊 Education data structure:', eduData); // ✅ ADD THIS
     } catch (eduError) {
       console.error('❌ Failed to fetch education:', eduError);
-      // Continue with empty education data
     }
 
     try {
       certData = await portfolioApi.getVisibleCertifications();
       console.log('✅ Certifications data loaded:', certData.length, 'records');
+      console.log('📊 Certifications data structure:', certData); // ✅ ADD THIS
     } catch (certError) {
       console.error('❌ Failed to fetch certifications:', certError);
-      // Continue with empty certifications data
     }
 
     setEducations(eduData);
@@ -118,10 +127,21 @@ const fetchEducationData = async () => {
     );
   }
 
+  // After the loading check, before rendering
+console.log('🔍 Rendering Education Section:', {
+  isLoading,
+  educationsCount: educations.length,
+  certificationsCount: certifications.length,
+  isVisible,
+});
+
   // Don't render if no data
-  if (educations.length === 0 && certifications.length === 0) {
-    return null;
-  }
+if (educations.length === 0 && certifications.length === 0) {
+  console.log('⚠️ Education Section hidden: No data available');
+  return null;
+}
+
+console.log('✅ Education Section rendering with data');
 
   return (
     <section
@@ -153,16 +173,24 @@ const fetchEducationData = async () => {
 
         {/* Education Cards - CRT Monitor Style */}
         {educations.length > 0 && (
-          <div className="mb-20">
-            <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-              {educations.map((edu, index) => (
-                <div
-                  key={edu._id}
-                  className={`glass-card p-8 scan-lines border border-[hsl(var(--deep-electric-blue)/0.3)] hover:border-[hsl(var(--neon-cyan)/0.5)] transition-all duration-500 group ${
-                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                  }`}
-                  style={{ transitionDelay: `${index * 200}ms` }}
-                >
+  <div className="mb-20">
+    <div 
+      className={`max-w-6xl mx-auto ${
+        educations.length === 1 
+          ? 'flex justify-center' 
+          : 'grid md:grid-cols-2 gap-8'
+      }`}
+    >
+      {educations.map((edu, index) => (
+        <div
+          key={edu._id}
+          className={`glass-card p-8 scan-lines border border-[hsl(var(--deep-electric-blue)/0.3)] hover:border-[hsl(var(--neon-cyan)/0.5)] transition-all duration-500 group ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          } ${
+            educations.length === 1 ? 'max-w-2xl w-full' : ''
+          }`}
+          style={{ transitionDelay: `${index * 200}ms` }}
+        >
                   {/* Terminal Header */}
                   <div className="flex items-center gap-2 mb-6 pb-4 border-b border-[hsl(var(--deep-electric-blue)/0.3)]">
                     <div className="w-3 h-3 rounded-full bg-red-500/80" />

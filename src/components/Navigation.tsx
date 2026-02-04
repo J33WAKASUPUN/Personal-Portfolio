@@ -17,6 +17,7 @@ const Navigation = () => {
     { href: '#hero', label: 'Home' },
     { href: '#about', label: 'About' },
     { href: '#education', label: 'Education' },
+    { href: '#experience', label: 'Experience' },
     { href: '#projects', label: 'Projects' },
     { href: '#tech', label: 'Tech Stack' },
     { href: '#contact', label: 'Contact' },

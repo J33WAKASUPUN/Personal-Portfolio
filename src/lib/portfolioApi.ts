@@ -48,7 +48,7 @@ class PortfolioApiService {
     return this.fetch('/experience/visible');
   }
 
-  // Education ✅ NEW
+  // Education
   async getVisibleEducation() {
     return this.fetch('/education/visible');
   }

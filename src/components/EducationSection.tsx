@@ -35,7 +35,7 @@ interface Certification {
 
 const EducationSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const [isVisible, setIsVisible] = useState(false); // Keep as false initially
+  const [isVisible, setIsVisible] = useState(true); // Keep as false initially
   const [educations, setEducations] = useState<Education[]>([]);
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [isLoading, setIsLoading] = useState(true);

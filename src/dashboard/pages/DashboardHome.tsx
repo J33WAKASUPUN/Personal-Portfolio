@@ -344,7 +344,7 @@ const DashboardHome = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="glass-card p-6 border border-[hsl(var(--deep-electric-blue)/0.3)]">
+      {/* <div className="glass-card p-6 border border-[hsl(var(--deep-electric-blue)/0.3)]">
         <h2 className="font-orbitron text-xl font-bold text-foreground mb-4">
           Quick Actions
         </h2>
@@ -378,10 +378,10 @@ const DashboardHome = () => {
             <span className="text-sm font-orbitron text-foreground">View Analytics</span>
           </Link>
         </div>
-      </div>
+      </div> */}
 
       {/* Hero CTA */}
-      <div className="glass-card p-8 border-2 border-[hsl(var(--neon-cyan)/0.3)] bg-gradient-to-br from-[hsl(var(--neon-cyan)/0.05)] to-transparent text-center">
+      {/* <div className="glass-card p-8 border-2 border-[hsl(var(--neon-cyan)/0.3)] bg-gradient-to-br from-[hsl(var(--neon-cyan)/0.05)] to-transparent text-center">
         <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] flex items-center justify-center animate-float">
           <Rocket className="w-10 h-10 text-background" />
         </div>
@@ -411,7 +411,7 @@ const DashboardHome = () => {
             Manage Hero Section
           </Link>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

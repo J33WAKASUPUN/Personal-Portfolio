@@ -21,7 +21,61 @@ class PortfolioApiService {
     return this.fetch('/hero');
   }
 
-  // Analytics - Record page view
+  // Projects
+  async getVisibleProjects() {
+    return this.fetch('/projects/visible');
+  }
+
+  async getFeaturedProjects() {
+    return this.fetch('/projects/featured');
+  }
+
+  async getProjectById(id: string) {
+    return this.fetch(`/projects/${id}`);
+  }
+
+  // Tech Stack
+  async getVisibleTechStack() {
+    return this.fetch('/tech-stack/visible');
+  }
+
+  async getTechStackByCategory(category: string) {
+    return this.fetch(`/tech-stack/category/${category}`);
+  }
+
+  // Experience
+  async getVisibleExperience() {
+    return this.fetch('/experience/visible');
+  }
+
+  // Blogs
+  async getVisibleBlogs() {
+    return this.fetch('/blogs/visible');
+  }
+
+  async getFeaturedBlogs() {
+    return this.fetch('/blogs/featured');
+  }
+
+  async getBlogById(id: string) {
+    return this.fetch(`/blogs/${id}`);
+  }
+
+  async getBlogsByCategory(category: string) {
+    return this.fetch(`/blogs/category/${category}`);
+  }
+
+  // Certifications
+  async getVisibleCertifications() {
+    return this.fetch('/certifications/visible');
+  }
+
+  // Social Links
+  async getVisibleSocialLinks() {
+    return this.fetch('/social-links/visible');
+  }
+
+  // Analytics
   async recordPageView(page: string) {
     try {
       const sessionId = this.getOrCreateSessionId();
@@ -37,6 +91,44 @@ class PortfolioApiService {
       });
     } catch (error) {
       console.error('Failed to record page view:', error);
+    }
+  }
+
+  async recordProjectView(projectId: string, projectName: string) {
+    try {
+      const sessionId = this.getOrCreateSessionId();
+      
+      await fetch(`${API_BASE_URL}/analytics/record`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          eventType: 'project_view',
+          resourceId: projectId,
+          resourceName: projectName,
+          sessionId,
+        }),
+      });
+    } catch (error) {
+      console.error('Failed to record project view:', error);
+    }
+  }
+
+  async recordBlogView(blogId: string, blogTitle: string) {
+    try {
+      const sessionId = this.getOrCreateSessionId();
+      
+      await fetch(`${API_BASE_URL}/analytics/record`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          eventType: 'blog_view',
+          resourceId: blogId,
+          resourceName: blogTitle,
+          sessionId,
+        }),
+      });
+    } catch (error) {
+      console.error('Failed to record blog view:', error);
     }
   }
 

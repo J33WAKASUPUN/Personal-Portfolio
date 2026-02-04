@@ -121,10 +121,26 @@ const HeroSection = () => {
               />
             </div>
             
-            <div className="glass-card p-6 mb-8 animate-fade-in border-l-4 border-l-[hsl(var(--neon-cyan))]" style={{ animationDelay: '0.3s' }}>
-              <p className="text-gray-300 text-base md:text-lg leading-relaxed font-light">
-                {heroData.bio}
-              </p>
+            {/* UPDATED: Terminal Style About Card */}
+            <div className="glass-card scan-lines mb-8 animate-fade-in overflow-hidden border border-[hsl(var(--deep-electric-blue)/0.3)] bg-[hsl(var(--void-black)/0.8)] shadow-[0_0_30px_rgba(0,0,0,0.5)]" style={{ animationDelay: '0.3s' }}>              
+              {/* Terminal Header Row */}
+              <div className="flex items-center gap-2 px-4 py-2 bg-[hsl(var(--void-black)/0.5)] border-b border-white/5">
+                <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
+                <span className="ml-3 font-orbitron text-[10px] md:text-xs text-muted-foreground tracking-wider opacity-70">
+                  user_bio.txt
+                </span>
+              </div>
+
+              {/* Terminal Body content */}
+              <div className="p-6 bg-[hsl(var(--void-black)/0.2)]">
+                <p className="text-gray-300 text-base md:text-lg leading-relaxed font-light font-mono">
+                  <span className="text-[hsl(var(--neon-cyan))] mr-2 select-none">$</span>
+                  {heroData.bio}
+                  <span className="animate-pulse ml-1 inline-block w-2 h-4 bg-[hsl(var(--neon-cyan))] align-middle" />
+                </p>
+              </div>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8 animate-fade-in" style={{ animationDelay: '0.4s' }}>
@@ -224,7 +240,7 @@ const HeroSection = () => {
 
         </div>
 
-        {/* Scroll Indicator - UPDATED */}
+        {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce flex flex-col items-center gap-2 cursor-pointer"
              onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}>
           <span className="font-orbitron text-[10px] md:text-xs tracking-[0.3em] text-[hsl(var(--neon-cyan))] drop-shadow-[0_0_8px_hsl(var(--neon-cyan)/0.8)] font-bold">

@@ -6,6 +6,7 @@ import HeroManagement from '../pages/HeroManagement';
 import ProjectsManagement from '../pages/ProjectsManagement';
 import TechStackManagement from '../pages/TechStackManagement';
 import ExperienceManagement from '../pages/ExperienceManagement';
+import EducationManagement from '../pages/EducationManagement';
 import BlogsManagement from '../pages/BlogsManagement';
 import CertificationsManagement from '../pages/CertificationsManagement';
 import SocialLinksManagement from '../pages/SocialLinksManagement';
@@ -30,6 +31,7 @@ const DashboardLayout = () => {
             <Route path="projects" element={<ProjectsManagement />} />
             <Route path="tech-stack" element={<TechStackManagement />} />
             <Route path="experience" element={<ExperienceManagement />} />
+            <Route path="education" element={<EducationManagement />} />
             <Route path="blogs" element={<BlogsManagement />} />
             <Route path="certifications" element={<CertificationsManagement />} />
             <Route path="social-links" element={<SocialLinksManagement />} />

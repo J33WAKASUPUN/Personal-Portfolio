@@ -5,6 +5,7 @@ import {
   FolderKanban, 
   Code2, 
   Briefcase, 
+  GraduationCap,
   BookOpen, 
   Award, 
   Share2, 
@@ -22,6 +23,7 @@ const Sidebar = () => {
     { icon: FolderKanban, label: 'Projects', path: '/dashboard/projects' },
     { icon: Code2, label: 'Tech Stack', path: '/dashboard/tech-stack' },
     { icon: Briefcase, label: 'Experience', path: '/dashboard/experience' },
+    { icon: GraduationCap, label: 'Education', path: '/dashboard/education' },
     { icon: BookOpen, label: 'Blogs', path: '/dashboard/blogs' },
     { icon: Award, label: 'Certifications', path: '/dashboard/certifications' },
     { icon: Share2, label: 'Social Links', path: '/dashboard/social-links' },
@@ -46,7 +48,7 @@ const Sidebar = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-2">
+      <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
         {navItems.map((item) => (
           <NavLink
             key={item.path}

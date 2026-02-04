@@ -416,13 +416,13 @@ console.log('✅ Education Section rendering with data');
         )}
 
         {/* Bottom Decorative Element */}
-        <div className={`mt-16 flex justify-center transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+         <div className={`mt-16 flex justify-center transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
           <div className="flex items-center gap-4">
-            <div className="w-16 h-px bg-gradient-to-r from-transparent to-[hsl(var(--neon-purple))]" />
-            <div className="w-3 h-3 rotate-45 border border-[hsl(var(--neon-purple))]" />
-            <div className="w-32 h-px bg-gradient-to-r from-[hsl(var(--neon-purple))] to-[hsl(var(--deep-electric-blue))]" />
-            <div className="w-3 h-3 rotate-45 border border-[hsl(var(--deep-electric-blue))]" />
-            <div className="w-16 h-px bg-gradient-to-l from-transparent to-[hsl(var(--deep-electric-blue))]" />
+            <div className="w-16 h-px bg-gradient-to-r from-transparent to-[hsl(var(--neon-cyan))]" />
+            <div className="w-3 h-3 rotate-45 border border-[hsl(var(--neon-cyan))]" />
+            <div className="w-32 h-px bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))]" />
+            <div className="w-3 h-3 rotate-45 border border-[hsl(var(--neon-magenta))]" />
+            <div className="w-16 h-px bg-gradient-to-l from-transparent to-[hsl(var(--neon-magenta))]" />
           </div>
         </div>
       </div>

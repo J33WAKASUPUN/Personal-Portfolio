@@ -102,7 +102,7 @@ const TechStackSection = () => {
         {/* Section Header - Compact */}
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <p className="font-orbitron text-[hsl(var(--neon-cyan))] text-sm uppercase tracking-[0.3em] mb-4">
-            {'// Experience.load()'}
+            {'// TechStack.initialize()'}
           </p>
           <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-neon-gradient mb-4">
             Technology Arsenal

@@ -1,4 +1,3 @@
-// Ensure variable name matches what is used below
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 class ApiService {
@@ -8,7 +7,7 @@ class ApiService {
   }
 
   async get<T>(endpoint: string): Promise<T> {
-    // Now using the correct variable
+    // 👇 Now using the correct variable
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       headers: {
         ...this.getAuthHeader(),

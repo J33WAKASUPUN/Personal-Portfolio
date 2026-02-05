@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
+// IMPORT YOUR API SERVICE (Adjust path if needed)
+import { api } from '@/services/api'; 
 
 interface User {
   userId: string;
@@ -47,62 +49,37 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const fetchUserProfile = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
-      const response = await fetch('http://localhost:3000/auth/profile', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        const userData = await response.json();
-        setUser(userData);
-      } else {
-        // Token invalid, clear it
-        localStorage.removeItem('accessToken');
-      }
+      // 👇 REPLACED: Uses api.get() - Auto-adds URL and Token
+      const userData = await api.get<User>('/auth/profile');
+      setUser(userData);
     } catch (error) {
       console.error('Failed to fetch user profile:', error);
+      // Token invalid, clear it
       localStorage.removeItem('accessToken');
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
   };
 
   const login = async (email: string, password: string) => {
-    const response = await fetch('http://localhost:3000/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
+    // 👇 REPLACED: Uses api.post() - Auto-adds URL
+    // api.post handles error throwing automatically
+    const data = await api.post<{ requiresPattern: boolean; tempToken?: string }>('/auth/login', { 
+      email, 
+      password 
     });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Login failed');
-    }
-
-    const data = await response.json();
+    
     return data;
   };
 
   const verifyPattern = async (tempToken: string, pattern: string) => {
-    const response = await fetch('http://localhost:3000/auth/verify-pattern', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ tempToken, pattern }),
+    // 👇 REPLACED: Uses api.post()
+    const data = await api.post<{ accessToken: string }>('/auth/verify-pattern', { 
+      tempToken, 
+      pattern 
     });
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Pattern verification failed');
-    }
-
-    const data = await response.json();
-    
     // Store token and fetch user profile
     localStorage.setItem('accessToken', data.accessToken);
     await fetchUserProfile();

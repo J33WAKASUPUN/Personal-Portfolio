@@ -1,4 +1,6 @@
 import { Github, Linkedin, Twitter, Heart, Mail, MapPin } from 'lucide-react';
+import logo from '@/assets/logo.png';
+
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -35,10 +37,25 @@ const Footer = () => {
           
           {/* Column 1: Identity & Bio (Span 5 cols) */}
           <div className="md:col-span-5 space-y-6">
-            <a href="#hero" className="inline-block">
-              <h2 className="font-orbitron text-2xl font-bold text-neon-gradient mb-2">
-                @JeewakaSupun
-              </h2>
+            {/* Logo Section */}
+            <a
+              href="#hero"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('#hero');
+              }}
+              className="flex items-center gap-3 group cursor-pointer"
+            >
+              {/* Logo Image */}
+              <img 
+                src={logo} 
+                alt="Logo" 
+                className="h-10 w-auto object-contain transition-all duration-300 group-hover:drop-shadow-[0_0_8px_hsl(var(--neon-cyan))]" 
+              />
+              {/* Brand Name */}
+              <span className="font-orbitron text-2xl font-bold text-neon-gradient">
+                J33wakaDev
+              </span>
             </a>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-sm font-mono">
               Full Stack Engineer crafting intelligent solutions with modern web technologies. Building the digital frontier, one pixel at a time.
@@ -94,7 +111,7 @@ const Footer = () => {
                 </div>
                 <div>
                   <span className="block text-xs font-bold text-foreground mb-0.5">Email</span>
-                  jeewaka@example.com
+                  supunprabodha789@gmail.com.com
                 </div>
               </a>
               

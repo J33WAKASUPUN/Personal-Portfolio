@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import logo from '@/assets/logo.png'; // Make sure this path matches your file structure
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -16,8 +17,6 @@ const Navigation = () => {
   const navLinks = [
     { href: '#hero', label: 'Home' },
     { href: '#about', label: 'About' },
-    // { href: '#education', label: 'Education' },
-    // { href: '#experience', label: 'Experience' },
     { href: '#tech', label: 'Skills' },
     { href: '#projects', label: 'Projects' },
     { href: '#blogs', label: 'Blog' },
@@ -44,16 +43,26 @@ const Navigation = () => {
       >
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between h-20">
-            {/* Logo */}
+            
+            {/* Logo Section */}
             <a
               href="#hero"
               onClick={(e) => {
                 e.preventDefault();
                 scrollToSection('#hero');
               }}
-              className="font-orbitron text-2xl font-bold text-neon-gradient cursor-pointer"
+              className="flex items-center gap-3 group cursor-pointer"
             >
-              {'Jeewaka Supun'}
+              {/* Logo Image */}
+              <img 
+                src={logo} 
+                alt="Logo" 
+                className="h-10 w-auto object-contain transition-all duration-300 group-hover:drop-shadow-[0_0_8px_hsl(var(--neon-cyan))]" 
+              />
+              {/* Brand Name */}
+              <span className="font-orbitron text-2xl font-bold text-neon-gradient">
+                J33wakaDev
+              </span>
             </a>
 
             {/* Desktop Menu */}

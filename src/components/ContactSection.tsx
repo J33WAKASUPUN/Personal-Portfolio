@@ -351,13 +351,13 @@ const ContactSection = () => {
         </div>
 
         {/* Bottom Decorative Element */}
-        <div className={`mt-16 flex justify-center transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`mt-16 flex justify-center transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
           <div className="flex items-center gap-4">
-            <div className="w-16 h-px bg-gradient-to-r from-transparent to-[hsl(var(--deep-electric-blue))]" />
-            <div className="w-3 h-3 rotate-45 border border-[hsl(var(--deep-electric-blue))]" />
-            <div className="w-32 h-px bg-gradient-to-r from-[hsl(var(--deep-electric-blue))] to-[hsl(var(--neon-cyan))]" />
-            <div className="w-3 h-3 rotate-45 border border-[hsl(var(--neon-cyan))]" />
-            <div className="w-16 h-px bg-gradient-to-l from-transparent to-[hsl(var(--neon-cyan))]" />
+            <div className="w-16 h-px bg-gradient-to-r from-transparent to-neon-cyan" />
+            <div className="w-3 h-3 rotate-45 border border-neon-cyan" />
+            <div className="w-32 h-px bg-gradient-to-r from-neon-cyan to-neon-magenta" />
+            <div className="w-3 h-3 rotate-45 border border-neon-magenta" />
+            <div className="w-16 h-px bg-gradient-to-l from-transparent to-neon-magenta" />
           </div>
         </div>
       </div>

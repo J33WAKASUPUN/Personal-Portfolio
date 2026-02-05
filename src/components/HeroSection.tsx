@@ -106,7 +106,7 @@ const HeroSection = () => {
             </p>
             
             <h1 className="font-orbitron text-4xl md:text-6xl font-bold mb-6 animate-fade-in" style={{ animationDelay: '0.1s' }}>
-              <span className="text-foreground">Hello, I'm</span>
+              <span className="text-foreground text-4xl">Hello, I'm</span>
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] filter drop-shadow-[0_0_10px_rgba(0,243,255,0.3)]">
                 {heroData.name}

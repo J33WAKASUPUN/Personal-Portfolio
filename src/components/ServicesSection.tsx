@@ -196,7 +196,7 @@ const ServicesSection = () => {
         </div>
 
         {/* Bottom Stats */}
-        <div className={`mt-16 flex justify-center transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`mt-16 flex justify-center transition-opacity duration-1000 delay-600 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
           <div className="glass-card px-8 py-4 border border-[hsl(var(--deep-electric-blue)/0.3)] flex items-center gap-8 bg-[hsl(var(--void-black)/0.6)] backdrop-blur-xl">
             <div className="flex items-center gap-3">
               <Rocket className="w-5 h-5 text-[hsl(var(--neon-cyan))]" />
@@ -216,16 +216,26 @@ const ServicesSection = () => {
           </div>
         </div>
 
-        {/* Bottom Decorative Element */}
-         <div className={`mt-16 flex justify-center transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-px bg-gradient-to-r from-transparent to-[hsl(var(--neon-cyan))]" />
-            <div className="w-3 h-3 rotate-45 border border-[hsl(var(--neon-cyan))]" />
-            <div className="w-32 h-px bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))]" />
-            <div className="w-3 h-3 rotate-45 border border-[hsl(var(--neon-magenta))]" />
-            <div className="w-16 h-px bg-gradient-to-l from-transparent to-[hsl(var(--neon-magenta))]" />
+        {/* Bottom Decorative Element - FIXED VISIBILITY (No Glow) */}
+        <div className={`mt-16 w-full flex justify-center items-center transition-opacity duration-1000 delay-800 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+          <div className="flex items-center gap-3 relative z-10">
+            {/* Left Line */}
+            <div className="w-24 h-[2px] flex-shrink-0 bg-gradient-to-r from-transparent to-[hsl(var(--neon-cyan))]" />
+            
+            {/* Left Diamond */}
+            <div className="w-3 h-3 flex-shrink-0 rotate-45 border border-[hsl(var(--neon-cyan))] bg-[hsl(var(--void-black))]" />
+            
+            {/* Center Line */}
+            <div className="w-32 h-[2px] flex-shrink-0 bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))]" />
+            
+            {/* Right Diamond */}
+            <div className="w-3 h-3 flex-shrink-0 rotate-45 border border-[hsl(var(--neon-magenta))] bg-[hsl(var(--void-black))]" />
+            
+            {/* Right Line */}
+            <div className="w-24 h-[2px] flex-shrink-0 bg-gradient-to-l from-transparent to-[hsl(var(--neon-magenta))]" />
           </div>
         </div>
+
       </div>
     </section>
   );

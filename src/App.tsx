@@ -10,6 +10,7 @@ import DashboardLayout from "./dashboard/layout/DashboardLayout";
 import Index from "./pages/Index";
 import Projects from "./pages/Projects";
 import NotFound from "./pages/NotFound";
+import CustomCursor from "./components/CustomCursor";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +19,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <CustomCursor /> 
       <BrowserRouter>
         <AuthProvider>
           <Routes>

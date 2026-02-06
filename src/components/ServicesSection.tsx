@@ -18,7 +18,7 @@ const services: Service[] = [
     title: 'Frontend & UX Engineering',
     description: 'Crafting immersive, pixel-perfect user experiences across web and mobile platforms using modern design systems.',
     features: [
-      'React, Next.js & React Native',
+      'React, Next.js & Flutter',
       'UI/UX Design & Prototyping',
       'Responsive & Mobile-First',
       'Performance Optimization',

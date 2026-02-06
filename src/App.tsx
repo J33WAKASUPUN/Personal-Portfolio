@@ -1,3 +1,4 @@
+import { useState, useCallback } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,43 +12,59 @@ import Index from "./pages/Index";
 import Projects from "./pages/Projects";
 import NotFound from "./pages/NotFound";
 import CustomCursor from "./components/CustomCursor";
+import PreLoader from "./components/PreLoader";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <CustomCursor /> 
-      <BrowserRouter>
-        <AuthProvider>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Index />} />
-            <Route path="/projects" element={<Projects />} />
+const App = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
 
-            {/* Dashboard Routes */}
-            <Route path="/dashboard/login" element={<LoginPage />} />
-            <Route
-              path="/dashboard/*"
-              element={
-                <ProtectedRoute>
-                  <DashboardLayout />
-                </ProtectedRoute>
-              }
-            />
+  const handleLoadComplete = useCallback(() => {
+    setIsLoaded(true);
+  }, []);
 
-            {/* Redirect /dashboard to /dashboard/home */}
-            <Route path="/dashboard" element={<Navigate to="/dashboard/home" replace />} />
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <CustomCursor />
 
-            {/* 404 */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AuthProvider>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+        {/* Pre-loader */}
+        {!isLoaded && <PreLoader onLoadComplete={handleLoadComplete} />}
+
+        {/* Main App - renders in background during preload */}
+        <div className={isLoaded ? 'opacity-100 transition-opacity duration-500' : 'opacity-0 h-0 overflow-hidden'}>
+          <BrowserRouter>
+            <AuthProvider>
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/" element={<Index />} />
+                <Route path="/projects" element={<Projects />} />
+
+                {/* Dashboard Routes */}
+                <Route path="/dashboard/login" element={<LoginPage />} />
+                <Route
+                  path="/dashboard/*"
+                  element={
+                    <ProtectedRoute>
+                      <DashboardLayout />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* Redirect /dashboard to /dashboard/home */}
+                <Route path="/dashboard" element={<Navigate to="/dashboard/home" replace />} />
+
+                {/* 404 */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </AuthProvider>
+          </BrowserRouter>
+        </div>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

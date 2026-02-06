@@ -60,7 +60,7 @@ const Navigation = () => {
                 className="h-10 w-auto object-contain transition-all duration-300 group-hover:drop-shadow-[0_0_8px_hsl(var(--neon-cyan))]" 
               />
               {/* Brand Name */}
-              <span className="font-orbitron text-2xl font-bold text-neon-gradient">
+              <span className="font-orbitron text-l font-bold text-neon-gradient">
                 J33wakaDev
               </span>
             </a>

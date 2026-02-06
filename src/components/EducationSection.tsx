@@ -108,9 +108,18 @@ const fetchEducationData = async () => {
   };
 
   // Duplicate certifications for infinite scroll
-  const duplicatedCertifications = certifications.length > 0 
-    ? [...certifications, ...certifications, ...certifications] 
-    : [];
+  // Logic: Ensure we have enough items to cover the screen, then double it for the loop.
+  // If you have few certs (e.g., 2), we repeat them to make a "set" of at least 6, then double that set.
+  const minItems = 6; // Minimum items to ensure smooth scrolling on wide screens
+  let baseList = [...certifications];
+  
+  // Fill up the base list if it's too short
+  while (baseList.length > 0 && baseList.length < minItems) {
+    baseList = [...baseList, ...certifications];
+  }
+
+  // Create exactly TWO halves for the 50% translate animation
+  const duplicatedCertifications = [...baseList, ...baseList];
 
   if (isLoading) {
     return (

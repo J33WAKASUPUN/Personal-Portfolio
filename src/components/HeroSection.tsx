@@ -150,13 +150,20 @@ const HeroSection = () => {
               >
                 View Projects
               </GlitchButton>
-              <GlitchButton
+              {/* <GlitchButton
                 variant="outline"
                 as="a"
                 href={heroData.resumeUrl}
                 download
               >
                 Download Resume
+              </GlitchButton> */}
+              <GlitchButton
+                variant="outline"
+                onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+                
+              >
+                Contact Me
               </GlitchButton>
             </div>
 

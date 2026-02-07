@@ -1,19 +1,79 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
+// ✅ In-memory cache for API responses
+const apiCache = new Map<string, { data: any; timestamp: number }>();
+const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
+
 class PortfolioApiService {
-  private async fetch<T>(endpoint: string): Promise<T> {
+  private async fetch<T>(endpoint: string, useCache = true): Promise<T> {
+    const cacheKey = endpoint;
+    
+    // ✅ Check cache first
+    if (useCache) {
+      const cached = apiCache.get(cacheKey);
+      if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+        return cached.data as T;
+      }
+    }
+
     try {
-      const response = await fetch(`${API_BASE_URL}${endpoint}`);
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        headers: {
+          'Accept': 'application/json',
+        },
+      });
       
       if (!response.ok) {
         throw new Error(`API Error: ${response.status}`);
       }
       
-      return await response.json();
+      const data = await response.json();
+      
+      // ✅ Store in cache
+      if (useCache) {
+        apiCache.set(cacheKey, { data, timestamp: Date.now() });
+      }
+      
+      return data;
     } catch (error) {
       console.error(`Failed to fetch ${endpoint}:`, error);
+      
+      // ✅ Return stale cache on error
+      const staleCache = apiCache.get(cacheKey);
+      if (staleCache) {
+        console.warn(`Using stale cache for ${endpoint}`);
+        return staleCache.data as T;
+      }
+      
       throw error;
     }
+  }
+
+  // ✅ Clear cache (useful for dashboard updates)
+  clearCache(endpoint?: string) {
+    if (endpoint) {
+      apiCache.delete(endpoint);
+    } else {
+      apiCache.clear();
+    }
+  }
+
+  // ✅ Prefetch multiple endpoints at once
+  async prefetchAll() {
+    const endpoints = [
+      '/hero',
+      '/projects/featured',
+      '/tech-stack/visible',
+      '/experience/visible',
+      '/education/visible',
+      '/certifications/visible',
+      '/blogs/featured',
+      '/social-links',
+    ];
+
+    await Promise.allSettled(
+      endpoints.map(endpoint => this.fetch(endpoint))
+    );
   }
 
   // Hero Section
@@ -81,10 +141,10 @@ class PortfolioApiService {
 
   // Social Links
   async getVisibleSocialLinks() {
-    return this.fetch('/social-links'); // ✅ Public endpoint (no /visible needed)
+    return this.fetch('/social-links');
   }
 
-  // Analytics
+  // Analytics (no cache)
   async recordPageView(page: string) {
     try {
       const sessionId = this.getOrCreateSessionId();

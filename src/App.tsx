@@ -14,7 +14,19 @@ import NotFound from "./pages/NotFound";
 import CustomCursor from "./components/CustomCursor";
 import PreLoader from "./components/PreLoader";
 
-const queryClient = new QueryClient();
+// ✅ Optimized QueryClient with aggressive caching
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 10, // 10 minutes - data stays fresh
+      gcTime: 1000 * 60 * 30, // 30 minutes - cache retention (formerly cacheTime)
+      refetchOnWindowFocus: false, // Don't refetch on tab focus
+      refetchOnReconnect: false, // Don't refetch on reconnect
+      retry: 1, // Only 1 retry on failure
+      refetchOnMount: false, // Don't refetch if data exists
+    },
+  },
+});
 
 const App = () => {
   const [isLoaded, setIsLoaded] = useState(false);

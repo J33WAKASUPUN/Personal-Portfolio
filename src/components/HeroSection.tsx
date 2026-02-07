@@ -162,9 +162,9 @@ const HeroSection = () => {
 
             <div className="flex gap-6 justify-center lg:justify-start animate-fade-in" style={{ animationDelay: '0.5s' }}>
               {[
-                { icon: Github, href: '#', label: 'GitHub' },
-                { icon: Linkedin, href: '#', label: 'LinkedIn' },
-                { icon: Mail, href: '#', label: 'Email' },
+                { icon: Github, href: 'https://github.com/J33WAKASUPUN', label: 'GitHub' },
+                { icon: Linkedin, href: 'https://www.linkedin.com/in/jeewakasupun', label: 'LinkedIn' },
+                { icon: Mail, href: 'https://mail.google.com/mail/u/0/?to=supunprabodha789@gmail.com&fs=1&tf=cm', label: 'Email' },
               ].map((social) => (
               <a
                   key={social.label}

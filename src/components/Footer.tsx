@@ -6,9 +6,9 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
-    { icon: Github, href: '#', label: 'GitHub' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
-    { icon: Mail, href: '#', label: 'Email' },
+    { icon: Github, href: 'https://github.com/J33WAKASUPUN', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/jeewakasupun', label: 'LinkedIn' },
+    { icon: Mail, href: 'https://mail.google.com/mail/u/0/?to=supunprabodha789@gmail.com&fs=1&tf=cm', label: 'Email' },
   ];
 
   const quickLinks = [

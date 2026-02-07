@@ -41,38 +41,26 @@ const AboutSection = () => {
   }, []);
 
   const calculateExperience = () => {
-    // Career start date: September 2025
-    const careerStartDate = new Date('2025-08-31');
+    // Career start date: Roughly August 2025
+    const careerStartDate = new Date('2025-08-01');
     const currentDate = new Date();
 
-    // Calculate difference in months
     const yearsDiff = currentDate.getFullYear() - careerStartDate.getFullYear();
     const monthsDiff = currentDate.getMonth() - careerStartDate.getMonth();
     const totalMonths = yearsDiff * 12 + monthsDiff;
 
-    // If career hasn't started yet, return 0
-    if (totalMonths < 0) {
-      return '0+ Months';
-    }
+    if (totalMonths < 0) return '0+ Months';
 
-    // Format based on duration
     if (totalMonths < 12) {
       return `${totalMonths}+ Month${totalMonths === 1 ? '' : 's'}`;
     } else {
       const years = Math.floor(totalMonths / 12);
-      const months = totalMonths % 12;
-      
-      if (months === 0) {
-        return `${years}+ Year${years === 1 ? '' : 's'}`;
-      } else {
-        return `${years}+ Year${years === 1 ? '' : 's'}`;
-      }
+      return `${years}+ Year${years === 1 ? '' : 's'}`;
     }
   };
 
   const fetchStats = async () => {
     try {
-      // Fetch projects and tech stack in parallel
       const [projects, techStack] = await Promise.all([
         portfolioApi.getVisibleProjects().catch(() => []),
         portfolioApi.getVisibleTechStack().catch(() => []),
@@ -86,7 +74,6 @@ const AboutSection = () => {
       });
     } catch (error) {
       console.error('Failed to fetch about stats:', error);
-      // Set fallback stats
       setStats({
         experience: calculateExperience(),
         projectsCompleted: 0,
@@ -98,9 +85,9 @@ const AboutSection = () => {
 
   const statsDisplay = [
     { icon: Cpu, value: stats.experience, label: 'Experience' },
-    { icon: Target, value: `${stats.projectsCompleted}+`, label: 'Projects Completed' },
-    { icon: Rocket, value: `${stats.technologies}+`, label: 'Technologies' },
-    { icon: Shield, value: stats.commitment, label: 'Commitment' },
+    { icon: Target, value: `${stats.projectsCompleted}+`, label: 'Projects Built' },
+    { icon: Rocket, value: `${stats.technologies}+`, label: 'Tech Stack' },
+    { icon: Shield, value: stats.commitment, label: 'Dedication' },
   ];
 
   return (
@@ -109,24 +96,22 @@ const AboutSection = () => {
       id="about"
       className="relative py-32 overflow-hidden"
     >
-      {/* Background effects - UPDATED TO CENTER */}
+      {/* Background effects */}
       <div className="absolute inset-0 z-0">
-        {/* Centered Cyan light */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-neon-cyan/5 rounded-full blur-3xl" />
-        {/* Centered Magenta light (slightly offset for depth) */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-[40%] -translate-y-[40%] w-[500px] h-[500px] bg-neon-magenta/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[hsl(var(--neon-cyan)/0.05)] rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-[40%] -translate-y-[40%] w-[500px] h-[500px] bg-[hsl(var(--neon-magenta)/0.05)] rounded-full blur-3xl" />
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Section Header */}
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <p className="font-orbitron text-neon-cyan text-sm uppercase tracking-[0.3em] mb-4">
+          <p className="font-orbitron text-[hsl(var(--neon-cyan))] text-sm uppercase tracking-[0.3em] mb-4">
             {'// System.loadProfile()'}
           </p>
           <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-neon-gradient mb-4">
             Identity Matrix
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-neon-cyan to-neon-magenta mx-auto" />
+          <div className="w-24 h-1 bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] mx-auto" />
         </div>
 
         {/* Main Content */}
@@ -139,12 +124,12 @@ const AboutSection = () => {
             {statsDisplay.map((stat, index) => (
               <div
                 key={stat.label}
-                className="glass-card p-6 text-center hover-glow group"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                className="glass-card p-6 text-center hover-glow group border border-[hsl(var(--deep-electric-blue)/0.3)]"
+                style={{ transitionDelay: `${index * 100}ms` }}
               >
                 <div className="mb-4 flex justify-center">
-                  <div className="p-4 rounded-xl bg-gradient-to-br from-neon-cyan/10 to-neon-magenta/10 border border-neon-cyan/20 group-hover:border-neon-cyan/50 transition-colors">
-                    <stat.icon className="w-8 h-8 text-neon-cyan group-hover:text-neon-magenta transition-colors" />
+                  <div className="p-4 rounded-xl bg-[hsl(var(--neon-cyan)/0.05)] border border-[hsl(var(--neon-cyan)/0.2)] group-hover:border-[hsl(var(--neon-cyan)/0.5)] transition-colors">
+                    <stat.icon className="w-8 h-8 text-[hsl(var(--neon-cyan))] group-hover:text-[hsl(var(--neon-magenta))] transition-colors" />
                   </div>
                 </div>
                 <p className="font-orbitron text-3xl md:text-4xl font-bold text-neon-gradient mb-2">
@@ -159,38 +144,45 @@ const AboutSection = () => {
 
           {/* RIGHT SIDE - Terminal Style Card */}
           <div 
-            className={`glass-card p-8 scan-lines transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}
+            className={`glass-card p-8 scan-lines border border-[hsl(var(--deep-electric-blue)/0.3)] transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}
           >
             {/* Terminal Header */}
-            <div className="flex items-center gap-2 mb-6 pb-4 border-b border-neon-cyan/20">
-              <div className="w-3 h-3 rounded-full bg-red-500/80" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-              <div className="w-3 h-3 rounded-full bg-green-500/80" />
-              <span className="ml-4 font-orbitron text-sm text-muted-foreground">
+            <div className="flex items-center gap-2 mb-6 pb-4 border-b border-[hsl(var(--deep-electric-blue)/0.3)] bg-[hsl(var(--deep-electric-blue)/0.05)] -mx-8 px-8 -mt-8 pt-8 rounded-t-xl">
+              <div className="w-3 h-3 rounded-full bg-red-500/80 shadow-[0_0_5px_rgba(239,68,68,0.5)]" />
+              <div className="w-3 h-3 rounded-full bg-yellow-500/80 shadow-[0_0_5px_rgba(234,179,8,0.5)]" />
+              <div className="w-3 h-3 rounded-full bg-green-500/80 shadow-[0_0_5px_rgba(34,197,94,0.5)]" />
+              <span className="ml-4 font-orbitron text-xs text-muted-foreground uppercase tracking-wider opacity-70">
                 mission_briefing.exe
               </span>
             </div>
 
-            {/* Terminal Content */}
+            {/* Terminal Content - UPDATED */}
             <div className="space-y-4 font-mono text-sm md:text-base">
-              <p className="text-neon-cyan">
+              <p className="text-[hsl(var(--neon-cyan))]">
                 <span className="text-muted-foreground">{'>'}</span> Initializing profile data...
               </p>
+              
               <p className="text-foreground leading-relaxed">
-                I'm a passionate <span className="text-neon-magenta">Software Engineer</span> with a love for 
-                building elegant solutions to complex problems. My journey through the digital cosmos 
-                has equipped me with expertise in full-stack development, cloud architecture, and 
-                creating seamless user experiences.
+                I am an adaptability-focused <span className="font-bold text-[hsl(var(--neon-cyan))]">Full-Stack Engineer</span> and CS student at SLIATE. I specialize in building cloud-native solutions, effectively bridging the gap between intuitive UI design and complex backend architecture.
               </p>
+              
               <p className="text-foreground leading-relaxed">
-                When I'm not coding, you'll find me exploring new technologies, contributing to 
-                open-source projects, and sharing knowledge with the developer community. I believe 
-                in <span className="text-neon-cyan">clean code</span>, <span className="text-neon-magenta">innovative thinking</span>, 
-                and the power of technology to transform ideas into reality.
+                Currently, I am delivering value as an <span className="text-[hsl(var(--neon-magenta))]">Associate Software Engineer</span>. My work centers on creating scalable web and mobile applications while ensuring high performance and adaptability in dynamic environments.
               </p>
-              <p className="text-neon-cyan">
-                <span className="text-muted-foreground">{'>'}</span> Status: <span className="text-green-400">Ready for new missions</span>
+              
+              <p className="text-foreground leading-relaxed">
+                Beyond coding, I am an enthusiast in <span className="text-[hsl(var(--neon-cyan))]">DevOps practices</span> and <span className="text-[hsl(var(--neon-magenta))]">AI/ML</span>. I am constantly learning how to deploy and manage applications to ensure they are robust, scalable, and ready for the future.
               </p>
+              
+              <div className="pt-2 flex items-center gap-2">
+                <span className="text-muted-foreground">{'>'}</span> 
+                <span className="text-[hsl(var(--neon-cyan))]">Current Status:</span> 
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <span className="text-green-400 text-xs font-orbitron tracking-wider">OPEN FOR OPPORTUNITIES</span>
+              </div>
             </div>
           </div>
 
@@ -199,11 +191,11 @@ const AboutSection = () => {
         {/* Bottom Decorative Element */}
         <div className={`mt-16 flex justify-center transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
           <div className="flex items-center gap-4">
-            <div className="w-16 h-px bg-gradient-to-r from-transparent to-neon-cyan" />
-            <div className="w-3 h-3 rotate-45 border border-neon-cyan" />
-            <div className="w-32 h-px bg-gradient-to-r from-neon-cyan to-neon-magenta" />
-            <div className="w-3 h-3 rotate-45 border border-neon-magenta" />
-            <div className="w-16 h-px bg-gradient-to-l from-transparent to-neon-magenta" />
+            <div className="w-16 h-px bg-gradient-to-r from-transparent to-[hsl(var(--neon-cyan))]" />
+            <div className="w-3 h-3 rotate-45 border border-[hsl(var(--neon-cyan))]" />
+            <div className="w-32 h-px bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))]" />
+            <div className="w-3 h-3 rotate-45 border border-[hsl(var(--neon-magenta))]" />
+            <div className="w-16 h-px bg-gradient-to-l from-transparent to-[hsl(var(--neon-magenta))]" />
           </div>
         </div>
       </div>

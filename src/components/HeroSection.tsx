@@ -248,7 +248,7 @@ const HeroSection = () => {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-1 left-1/2 -translate-x-1/2 animate-bounce flex flex-col items-center gap-2 cursor-pointer"
+        <div className="flex items-center justify-center bottom-1 -translate-x-1/2 animate-bounce flex flex-col items-center gap-2 cursor-pointer"
              onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}>
           <span className="font-orbitron text-[10px] md:text-xs tracking-[0.3em] text-[hsl(var(--neon-cyan))] drop-shadow-[0_0_8px_hsl(var(--neon-cyan)/0.8)] font-bold">
             SCROLL

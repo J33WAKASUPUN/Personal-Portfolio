@@ -111,7 +111,7 @@ const Footer = () => {
                 </div>
                 <div>
                   <span className="block text-xs font-bold text-foreground mb-0.5">Email</span>
-                  supunprabodha789@gmail.com.com
+                  supunprabodha789@gmail.com
                 </div>
               </a>
               

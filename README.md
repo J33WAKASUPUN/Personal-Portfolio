@@ -1,73 +1,127 @@
-# Welcome to your Lovable project
+<div align="center">
 
-## Project info
+<!-- Logo -->
+<img src="./src/assets/logo.png" alt="J33wakaDev Logo" width="120" height="120" />
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+# 🚀 J33wakaDev Portfolio
 
-## How can I edit this code?
+### _Crafting Digital Experiences at the Speed of Light_
 
-There are several ways of editing your application.
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-jeewakasupun.dev-00F3FF?style=for-the-badge&labelColor=0a0a14)](https://jeewakasupun.dev)
+[![GitHub](https://img.shields.io/badge/GitHub-J33WAKASUPUN-181717?style=for-the-badge&logo=github&labelColor=0a0a14)](https://github.com/J33WAKASUPUN)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Jeewaka_Supun-0A66C2?style=for-the-badge&logo=linkedin&labelColor=0a0a14)](https://www.linkedin.com/in/jeewakasupun)
 
-**Use Lovable**
+<br />
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+<!-- Add your portfolio screenshot here -->
+<img src="./screenshots/portfolio-hero.png" alt="Portfolio Screenshot" width="100%" style="border-radius: 12px; border: 2px solid #1a3a5c;" />
 
-Changes made via Lovable will be committed automatically to this repo.
+<br />
 
-**Use your preferred IDE**
+**A futuristic, space-themed personal portfolio showcasing my journey as a Full-Stack Developer.**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Built with cutting-edge technologies and featuring stunning animations, CRT monitor aesthetics, and a cosmic user experience.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+[View Demo](https://jeewakasupun.dev) · [Report Bug](https://github.com/J33WAKASUPUN/Personal-Portfolio/issues) · [Request Feature](https://github.com/J33WAKASUPUN/Personal-Portfolio/issues)
 
-Follow these steps:
+</div>
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+---
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 📸 Screenshots
 
-# Step 3: Install the necessary dependencies.
-npm i
+<div align="center">
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+### 🏠 Hero Section
+<!-- Add hero section screenshot -->
+<img src="./screenshots/hero-section.png" alt="Hero Section" width="90%" style="border-radius: 8px; margin: 10px 0;" />
 
-**Edit a file directly in GitHub**
+### 💼 Projects Showcase
+<!-- Add projects section screenshot -->
+<img src="./screenshots/projects-section.png" alt="Projects Section" width="90%" style="border-radius: 8px; margin: 10px 0;" />
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### 🛠️ Tech Stack
+<!-- Add tech stack section screenshot -->
+<img src="./screenshots/tech-stack-section.png" alt="Tech Stack Section" width="90%" style="border-radius: 8px; margin: 10px 0;" />
 
-**Use GitHub Codespaces**
+### 📱 Mobile Responsive
+<!-- Add mobile screenshot -->
+<img src="./screenshots/mobile-view.png" alt="Mobile View" width="300px" style="border-radius: 8px; margin: 10px 0;" />
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+</div>
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+## ✨ Features
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+<table>
+<tr>
+<td width="50%">
 
-## How can I deploy this project?
+### 🎨 **Design & UX**
+- 🌌 Space-themed futuristic aesthetic
+- 🖥️ CRT monitor-styled cards
+- ✨ Neon glow effects (Cyan & Magenta)
+- 🌟 Animated starfield background
+- 🎯 Custom cursor with trailing effect
+- 📱 Fully responsive (Mobile-first)
+- 🌙 Dark mode optimized
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+</td>
+<td width="50%">
 
-## Can I connect a custom domain to my Lovable project?
+### ⚡ **Performance**
+- 🚀 Pre-loader with data prefetching
+- 💾 In-memory API caching (10 min)
+- 📦 Code splitting & lazy loading
+- 🔄 Service Worker for offline support
+- 🗜️ Optimized build with Terser
+- 🎬 60fps smooth animations
+- 📊 Lighthouse score 90+
 
-Yes, you can!
+</td>
+</tr>
+</table>
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### 🔧 **Technical Features**
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+| Feature | Description |
+|---------|-------------|
+| 🏠 **Dynamic Hero** | Typewriter animation, profile image, social links |
+| 📊 **About Stats** | Auto-calculated experience, projects count, tech stack |
+| 🎓 **Education** | Academic timeline with certifications marquee |
+| 💼 **Experience** | Multi-role support per company, achievements |
+| 🛠️ **Tech Stack** | Grouped by category, brand colors, official logos |
+| 🚀 **Projects** | Featured carousel, filtering, detailed modals |
+| 📝 **Blog** | Medium RSS integration, auto-sync |
+| 📧 **Contact** | EmailJS integration, social links from API |
+| 📈 **Analytics** | Page views, project views, visitor tracking |
+
+---
+
+## 🛠️ Tech Stack
+
+<div align="center">
+
+### Frontend
+[![React](https://img.shields.io/badge/React_19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://typescriptlang.org)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Shadcn/ui](https://img.shields.io/badge/shadcn/ui-000000?style=for-the-badge&logo=shadcnui&logoColor=white)](https://ui.shadcn.com)
+
+### Backend
+[![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com)
+[![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://mongodb.com)
+[![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io)
+
+### DevOps & Hosting
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com)
+[![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/features/actions)
+[![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)](https://nginx.org)
+
+</div>
+
+---
+
+
